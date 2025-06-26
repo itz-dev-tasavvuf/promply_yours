@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Automated Freelancer Blueprint</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Chosen Palette: Calm Harmony (Neutral Grays, Soft Sky Blue Accent) -->
+    <!-- Application Structure Plan: The application is designed as a single-page "hub-and-spoke" dashboard. The main view ('Overview') acts as the hub, presenting the 10 automatable gigs as interactive cards. Clicking a card (a 'spoke') reveals a detailed blueprint for that specific service, keeping the interface clean and focused. A persistent top navigation allows users to jump to cross-cutting thematic sections (Tech Stack, Production, Monetization) at any time. This non-linear structure prioritizes user-driven exploration over the linear format of the source report, allowing users to quickly access the information most relevant to them. -->
+    <!-- Visualization & Content Choices: Gigs are presented as interactive cards for clear navigation. Technical details for each gig are organized into a tab-like structure to prevent information overload. The 'Production-Grade' section uses a Radar Chart (via Chart.js) to visually represent the equal importance and interconnectedness of the four core pillars (Scalability, Monitoring, Cost, Delivery), making an abstract concept tangible. 'Tech Stack' uses an accordion to organize a large amount of information concisely. 'Monetization' uses comparative cards for easy analysis. All choices are made to enhance understanding and engagement. -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            scroll-behavior: smooth;
+        }
+        .view {
+            display: none;
+        }
+        .view.active {
+            display: block;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 350px;
+            max-height: 400px;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 400px;
+            }
+        }
+        .nav-link {
+            transition: all 0.3s ease;
+        }
+        .nav-link.active {
+            color: #0369a1; /* sky-700 */
+            border-bottom-color: #0369a1;
+        }
+        .gig-card {
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+        }
+        .gig-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+        }
+    </style>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body class="bg-slate-50 text-slate-800">
+
+    <div id="app" class="container mx-auto px-4 sm:px-6 lg:px-8">
+        
+        <header class="sticky top-0 bg-slate-50/80 backdrop-blur-lg z-50 py-4 border-b border-slate-200">
+            <div class="flex flex-col sm:flex-row justify-between items-center">
+                <h1 class="text-2xl font-bold text-slate-900 mb-4 sm:mb-0">Automated Freelancer Blueprint</h1>
+                <nav id="main-nav" class="flex flex-wrap justify-center space-x-4 sm:space-x-6 text-sm sm:text-base font-medium text-slate-600">
+                    <a href="#overview" data-view="overview" class="nav-link py-2 border-b-2 border-transparent hover:text-sky-700 hover:border-sky-700">Overview</a>
+                    <a href="#tech-stack" data-view="tech-stack" class="nav-link py-2 border-b-2 border-transparent hover:text-sky-700 hover:border-sky-700">Tech Stack</a>
+                    <a href="#production" data-view="production" class="nav-link py-2 border-b-2 border-transparent hover:text-sky-700 hover:border-sky-700">Production System</a>
+                    <a href="#monetization" data-view="monetization" class="nav-link py-2 border-b-2 border-transparent hover:text-sky-700 hover:border-sky-700">Monetization</a>
+                </nav>
+            </div>
+        </header>
+
+        <main class="py-8 md:py-12">
+            
+            <!-- Overview Section -->
+            <section id="overview" class="view">
+                <div class="text-center mb-12">
+                    <h2 class="text-3xl md:text-4xl font-bold text-slate-900 mb-4">The Vision for Automated Freelancing</h2>
+                    <p class="max-w-3xl mx-auto text-slate-600">
+                        This system uses open-source AI and n8n to automate the top 10 freelance gigs, aiming for zero human labor. Explore the blueprints below to see how each service can be built for scalability, low cost, and high efficiency. Click any card to dive into the technical details.
+                    </p>
+                </div>
+
+                <div id="gig-grid" class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <!-- Gig cards will be inserted here by JS -->
+                </div>
+
+                <div id="gig-detail" class="hidden">
+                    <!-- Gig detail content will be inserted here by JS -->
+                </div>
+            </section>
+
+            <!-- Tech Stack Section -->
+            <section id="tech-stack" class="view">
+                <div class="text-center mb-12">
+                    <h2 class="text-3xl md:text-4xl font-bold text-slate-900 mb-4">Core Technology Stack</h2>
+                    <p class="max-w-3xl mx-auto text-slate-600">
+                        A diverse set of open-source AI models forms the foundation of the automated system, orchestrated by n8n. Below are the key technologies for each capability, from language understanding to video generation.
+                    </p>
+                </div>
+                <div id="tech-stack-accordion" class="space-y-4 max-w-4xl mx-auto">
+                    <!-- Accordion items will be inserted here -->
+                </div>
+            </section>
+
+            <!-- Production System Section -->
+            <section id="production" class="view">
+                <div class="text-center mb-12">
+                    <h2 class="text-3xl md:text-4xl font-bold text-slate-900 mb-4">Production-Grade Automation</h2>
+                    <p class="max-w-3xl mx-auto text-slate-600">
+                        Achieving "zero human labor" requires a robust production system. The four pillars—Scalability, Monitoring, Cost Control, and Delivery—are equally critical for building a resilient and profitable automated service.
+                    </p>
+                </div>
+                <div class="grid lg:grid-cols-2 gap-8 items-center">
+                    <div class="chart-container">
+                        <canvas id="productionChart"></canvas>
+                    </div>
+                    <div id="production-details" class="space-y-6">
+                        <!-- Production details will be inserted here by JS -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- Monetization Section -->
+            <section id="monetization" class="view">
+                <div class="text-center mb-12">
+                    <h2 class="text-3xl md:text-4xl font-bold text-slate-900 mb-4">Monetization Strategies</h2>
+                    <p class="max-w-3xl mx-auto text-slate-600">
+                        Effective monetization aligns pricing with the value delivered by the AI services. A flexible strategy, often a hybrid model, is key to capturing diverse market needs and ensuring sustainable revenue.
+                    </p>
+                </div>
+                <div id="monetization-grid" class="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto">
+                     <!-- Monetization cards will be inserted here by JS -->
+                </div>
+            </section>
+
+        </main>
+    </div>
+
+    <script>
+        const appData = {
+            gigs: [
+                { id: 'content-writing', name: 'AI Content Writing', icon: '✍️', benefit: 'Scalable, high-volume content generation; consistent brand voice.', models: ['LLaMA 3', 'Mistral-8x22B', 'Google Gemma 2', 'brexhq/prompt-engineering'], n8n: '`Webhook` Trigger, `AI Agent` + `AI Chat Model` nodes, `Function` node for formatting, deliver via `Email`/`Google Drive`.' },
+                { id: 'proofreading', name: 'Proofreading & Editing', icon: '📝', benefit: 'Rapid, accurate error detection; consistent quality across documents.', models: ['LanguageTool', 'Harper', 'LLaMA 3', 'Mistral-8x22B'], n8n: '`Google Drive` Trigger, `HTTP Request` to LanguageTool API, `AI Chat Model` for contextual edits, `Function` node to process corrections.' },
+                { id: 'podcast-writing', name: 'Podcast Writing', icon: '🎙️', benefit: 'Automated script/outline generation; efficient content structuring.', models: ['LLaMA 3', 'Mistral-8x22B', 'Whisper (for transcription)'], n8n: '`Webhook` Trigger, `AI Chat Model` for script, `HTTP Request` to Whisper API if transcribing source audio.' },
+                { id: 'image-generation', name: 'AI Image Generation', icon: '🎨', benefit: 'Fast concept visualization; diverse asset creation at scale.', models: ['Stable Diffusion', 'Fooocus', 'StyleGAN3', 'n8n-nodes-comfyui'], n8n: '`Webhook` Trigger, `ComfyUI Node` or `HTTP Request` to image API, `Function` for post-processing, deliver via `Google Drive`.' },
+                { id: 'video-creation', name: 'Social Media Reels', icon: '🎬', benefit: 'End-to-end video production; multi-platform distribution.', models: ['HunyuanVideo', 'Open-Sora', 'WhisperSpeech (TTS)'], n8n: '`Schedule` Trigger, `AI Chat Model` for script, `HTTP Request` for video/audio gen, `HTTP Request` to publish to social APIs.' },
+                { id: 'chatbot-building', name: 'Chatbot Building', icon: '💬', benefit: '24/7 automated customer interaction; scalable lead qualification.', models: ['Rasa', 'Botpress', 'LLaMA 3', 'Vicuna-13B'], n8n: '`Chat Trigger` or `Webhook`, `AI Agent` with `Memory`, `HTTP Request` for tool use (e.g., search, calendar).' },
+                { id: 'transcription', name: 'Transcription & Voiceover', icon: '🎧', benefit: 'High-volume audio processing; rapid text-to-audio conversion.', models: ['Whisper (STT)', 'WhisperSpeech (TTS)', 'KOKORO TTS'], n8n: '`Google Drive` Trigger, `HTTP Request` or `Execute Command` for STT/TTS, `Read/Write Binary File` nodes.' },
+                { id: 'resume-writing', name: 'Resume/Cover Letter', icon: '📄', benefit: 'Automated resume optimization; ATS-friendly document creation.', models: ['Reactive Resume', 'ResumeLM', 'pyresparser', 'LLaMA 3'], n8n: '`Webhook` Trigger, `HTTP Request` to resume parser, `AI Chat Model` for tailoring content, `Function` node for formatting.' },
+                { id: 'data-entry', name: 'Data Entry & Extraction', icon: '📊', benefit: 'Reduced manual data entry; improved accuracy and processing speed.', models: ['Tesseract', 'NanoNets-OCR-s', 'agentic-doc', 'invoice-parser'], n8n: '`Gmail`/`Google Drive` Trigger, `HTTP Request` to OCR/DI API, `Function` for validation, store in `Google Sheets`/DB.' },
+                { id: 'social-media', name: 'Social Media Marketing', icon: '📱', benefit: 'Consistent online presence; automated content scheduling and posting.', models: ['LLaMA 3', 'Stable Diffusion', 'HunyuanVideo'], n8n: '`Schedule` Trigger, `AI Chat Model` for text, `ComfyUI Node` or `HTTP Request` for visuals, `HTTP Request` to publishing APIs.' }
+            ],
+            techStack: [
+                { name: 'LLMs (Content & Chat)', models: ['LLaMA 3', 'Google Gemma 2', 'Mistral-8x22B', 'Vicuna-13B', 'DeepSeek LLM'], description: 'Models for generating text, writing code, and powering conversational agents.' },
+                { name: 'Image Generation', models: ['Stable Diffusion', 'Fooocus', 'DALL-E Mini', 'StyleGAN3'], description: 'Models that create diverse visual assets from text descriptions or other images.' },
+                { name: 'Video Generation', models: ['HunyuanVideo', 'Open-Sora'], description: 'Foundation models for text-to-video and image-to-video synthesis.' },
+                { name: 'Speech & Audio', models: ['Whisper (STT)', 'WhisperSpeech (TTS)', 'KOKORO TTS', 'Mozilla DeepSpeech'], description: 'Technologies for converting speech to text (transcription) and text to speech (voiceover).' },
+                { name: 'Proofreading & Grammar', models: ['LanguageTool', 'Harper'], description: 'Specialized tools for detecting and correcting grammatical errors and style issues.' },
+                { name: 'Document Intelligence', models: ['pyresparser', 'OpenResume', 'NanoNets-OCR-s', 'invoice-parser'], description: 'Models designed to parse and extract structured information from documents like resumes and invoices.' }
+            ],
+            production: [
+                { name: 'Scalability', icon: '🚀', description: 'Design modular workflows and deploy on containerized infrastructure like Kubernetes (AWS EKS) for auto-scaling and high availability.' },
+                { name: 'Monitoring', icon: '📡', description: 'Implement robust error handling with `Try/Catch` blocks, conditional retries, and automated alerts to external logging systems like Datadog.' },
+                { name: 'Cost Control', icon: '💰', description: 'Use tools like n8n\'s `Token Estim8r` to track AI usage costs in real-time and set automated alerts for budget thresholds.' },
+                { name: 'Delivery', icon: '📦', description: 'Automate final output delivery using integrations like `Google Drive`, `Dropbox`, or `SFTP`, and send client notifications via `Email` or `Slack`.' }
+            ],
+            monetization: [
+                { name: 'Subscription Models', icon: '🔄', description: 'Offer predictable recurring revenue through tiered plans based on features, user count, or usage volume. Simplifies budgeting for clients.' },
+                { name: 'Usage-Based Pricing', icon: '💧', description: 'Clients pay per unit of service (e.g., per image, per 1000 words). Highly flexible and directly aligns cost with value received.' },
+                { name: 'Hybrid Models', icon: '🧩', description: 'Combine subscription and usage-based models. A "Freemium" tier can attract users, with paid tiers unlocking more features or higher usage limits.' },
+                { name: 'Outcome-Based Pricing', icon: '🎯', description: 'For enterprise clients, tie pricing to measurable business outcomes (e.g., percentage of cost saved). Aligns incentives but is more complex to implement.' }
+            ]
+        };
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const views = document.querySelectorAll('.view');
+            const navLinks = document.querySelectorAll('#main-nav a');
+            const gigGrid = document.getElementById('gig-grid');
+            const gigDetail = document.getElementById('gig-detail');
+            const techStackAccordion = document.getElementById('tech-stack-accordion');
+            const productionDetails = document.getElementById('production-details');
+            const monetizationGrid = document.getElementById('monetization-grid');
+            
+            let productionChart = null;
+
+            function updateNav(viewId) {
+                navLinks.forEach(link => {
+                    link.classList.toggle('active', link.dataset.view === viewId);
+                });
+            }
+
+            function switchView(viewId) {
+                views.forEach(view => view.classList.remove('active'));
+                const activeView = document.getElementById(viewId);
+                if (activeView) {
+                    activeView.classList.add('active');
+                }
+                updateNav(viewId);
+
+                if (viewId === 'production' && !productionChart) {
+                    renderProductionChart();
+                } else if (viewId !== 'production' && productionChart) {
+                    productionChart.destroy();
+                    productionChart = null;
+                }
+                window.scrollTo(0, 0);
+            }
+
+            function renderGigGrid() {
+                gigGrid.innerHTML = appData.gigs.map(gig => `
+                    <div data-id="${gig.id}" class="gig-card bg-white p-6 rounded-xl shadow-sm cursor-pointer border border-slate-200 hover:border-sky-500">
+                        <div class="flex items-center space-x-4">
+                            <div class="text-4xl">${gig.icon}</div>
+                            <div>
+                                <h3 class="text-xl font-bold text-slate-900">${gig.name}</h3>
+                                <p class="text-slate-500 text-sm mt-1">${gig.benefit}</p>
+                            </div>
+                        </div>
+                    </div>
+                `).join('');
+            }
+            
+            async function renderGigDetail(gigId) {
+                const gig = appData.gigs.find(g => g.id === gigId);
+                if (!gig) return;
+
+                gigDetail.innerHTML = `
+                    <div class="bg-white p-6 sm:p-8 rounded-2xl shadow-lg border border-slate-200 animate-fade-in">
+                        <div class="flex justify-between items-start mb-6">
+                            <div>
+                                <div class="flex items-center space-x-4 mb-2">
+                                    <span class="text-5xl">${gig.icon}</span>
+                                    <h2 class="text-3xl font-bold text-slate-900">${gig.name}</h2>
+                                </div>
+                                <p class="text-slate-600 font-medium">${gig.benefit}</p>
+                            </div>
+                            <button id="back-to-grid" class="text-sm font-semibold text-sky-700 hover:text-sky-900 transition-colors">← Back to Overview</button>
+                        </div>
+                        
+                        <div class="grid md:grid-cols-2 gap-8 mt-8">
+                            <div>
+                                <h4 class="text-xl font-semibold text-slate-800 border-b-2 border-sky-200 pb-2 mb-4">Recommended OSS Models</h4>
+                                <ul class="space-y-2">
+                                    ${gig.models.map(model => `<li class="flex items-center"><span class="text-sky-500 mr-2">◆</span><span class="text-slate-700">${model}</span></li>`).join('')}
+                                </ul>
+                            </div>
+                            <div>
+                                <h4 class="text-xl font-semibold text-slate-800 border-b-2 border-sky-200 pb-2 mb-4">n8n Workflow Design</h4>
+                                <p id="n8n-workflow-text" class="text-slate-700 leading-relaxed mb-4">${gig.n8n}</p>
+                                <div class="flex flex-wrap gap-2 mb-4">
+                                    <button id="elaborate-workflow-btn" class="bg-sky-600 text-white px-4 py-2 rounded-lg hover:bg-sky-700 transition-colors shadow-md text-sm">✨ Elaborate Workflow ✨</button>
+                                    <button id="monetization-strategy-btn" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors shadow-md text-sm">✨ Suggest Monetization Strategy ✨</button>
+                                </div>
+
+                                <div id="expanded-workflow-output" class="mt-4 p-4 bg-slate-50 border border-slate-200 rounded-lg text-slate-700 hidden">
+                                    <p class="font-semibold mb-2">Expanded Workflow:</p>
+                                    <p id="expanded-workflow-text"></p>
+                                    <div id="loading-indicator-workflow" class="hidden text-center mt-4">
+                                        <div class="animate-spin inline-block w-6 h-6 border-4 border-sky-500 border-dotted rounded-full"></div>
+                                        <p class="text-sky-600 mt-2">Generating Workflow...</p>
+                                    </div>
+                                    <p id="error-message-workflow" class="text-red-500 mt-2 hidden">Error generating workflow. Please try again.</p>
+                                </div>
+
+                                <div id="monetization-strategy-output" class="mt-4 p-4 bg-slate-50 border border-slate-200 rounded-lg text-slate-700 hidden">
+                                    <p class="font-semibold mb-2">Suggested Monetization Strategy:</p>
+                                    <p id="monetization-strategy-text"></p>
+                                    <div id="loading-indicator-monetization" class="hidden text-center mt-4">
+                                        <div class="animate-spin inline-block w-6 h-6 border-4 border-blue-500 border-dotted rounded-full"></div>
+                                        <p class="text-blue-600 mt-2">Generating Strategy...</p>
+                                    </div>
+                                    <p id="error-message-monetization" class="text-red-500 mt-2 hidden">Error generating strategy. Please try again.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                gigGrid.classList.add('hidden');
+                gigDetail.classList.remove('hidden');
+
+                document.getElementById('back-to-grid').addEventListener('click', () => {
+                    gigDetail.classList.add('hidden');
+                    gigGrid.classList.remove('hidden');
+                    gigDetail.innerHTML = '';
+                });
+
+                const elaborateButton = document.getElementById('elaborate-workflow-btn');
+                const expandedOutputDiv = document.getElementById('expanded-workflow-output');
+                const expandedText = document.getElementById('expanded-workflow-text');
+                const loadingIndicatorWorkflow = document.getElementById('loading-indicator-workflow');
+                const errorMessageWorkflow = document.getElementById('error-message-workflow');
+
+                const monetizationButton = document.getElementById('monetization-strategy-btn');
+                const monetizationOutputDiv = document.getElementById('monetization-strategy-output');
+                const monetizationText = document.getElementById('monetization-strategy-text');
+                const loadingIndicatorMonetization = document.getElementById('loading-indicator-monetization');
+                const errorMessageMonetization = document.getElementById('error-message-monetization');
+
+
+                elaborateButton.addEventListener('click', async () => {
+                    elaborateButton.disabled = true;
+                    monetizationButton.disabled = true; // Disable other button during generation
+                    expandedOutputDiv.classList.add('hidden');
+                    expandedText.innerHTML = '';
+                    errorMessageWorkflow.classList.add('hidden');
+                    loadingIndicatorWorkflow.classList.remove('hidden');
+                    monetizationOutputDiv.classList.add('hidden'); // Hide monetization output if visible
+
+                    try {
+                        const prompt = `Elaborate on the n8n workflow for '${gig.name}'. The current description is: '${gig.n8n}'. Provide a more detailed step-by-step process, including specific n8n nodes where applicable, and consider potential edge cases or advanced functionalities. Keep it concise but informative, suitable for a technical overview.`;
+                        
+                        let chatHistory = [];
+                        chatHistory.push({ role: "user", parts: [{ text: prompt }] });
+                        const payload = { contents: chatHistory };
+                        const apiKey = ""; // Canvas will automatically provide this
+                        const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
+
+                        const response = await fetch(apiUrl, {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify(payload)
+                        });
+                        
+                        if (!response.ok) {
+                            throw new Error(`HTTP error! status: ${response.status}`);
+                        }
+
+                        const result = await response.json();
+                        
+                        if (result.candidates && result.candidates.length > 0 &&
+                            result.candidates[0].content && result.candidates[0].content.parts &&
+                            result.candidates[0].content.parts.length > 0) {
+                            const text = result.candidates[0].content.parts[0].text;
+                            expandedText.innerHTML = text.replace(/\n/g, '<br>'); // Preserve newlines
+                            expandedOutputDiv.classList.remove('hidden');
+                        } else {
+                            throw new Error('Unexpected API response structure.');
+                        }
+                    } catch (error) {
+                        console.error('Error calling Gemini API:', error);
+                        errorMessageWorkflow.classList.remove('hidden');
+                        expandedOutputDiv.classList.remove('hidden'); // Show the div even with error to display message
+                    } finally {
+                        loadingIndicatorWorkflow.classList.add('hidden');
+                        elaborateButton.disabled = false;
+                        monetizationButton.disabled = false; // Re-enable other button
+                    }
+                });
+
+                monetizationButton.addEventListener('click', async () => {
+                    monetizationButton.disabled = true;
+                    elaborateButton.disabled = true; // Disable other button during generation
+                    monetizationOutputDiv.classList.add('hidden');
+                    monetizationText.innerHTML = '';
+                    errorMessageMonetization.classList.add('hidden');
+                    loadingIndicatorMonetization.classList.remove('hidden');
+                    expandedOutputDiv.classList.add('hidden'); // Hide workflow output if visible
+
+                    try {
+                        const prompt = `Suggest a monetization strategy for an automated freelance service specializing in '${gig.name}' (Benefit: ${gig.benefit}). Consider different pricing models (e.g., subscription, usage-based, hybrid) and how they might apply to this specific service. Provide a brief explanation for each suggestion.`;
+                        
+                        let chatHistory = [];
+                        chatHistory.push({ role: "user", parts: [{ text: prompt }] });
+                        const payload = { contents: chatHistory };
+                        const apiKey = ""; // Canvas will automatically provide this
+                        const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
+
+                        const response = await fetch(apiUrl, {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify(payload)
+                        });
+                        
+                        if (!response.ok) {
+                            throw new Error(`HTTP error! status: ${response.status}`);
+                        }
+
+                        const result = await response.json();
+                        
+                        if (result.candidates && result.candidates.length > 0 &&
+                            result.candidates[0].content && result.candidates[0].content.parts &&
+                            result.candidates[0].content.parts.length > 0) {
+                            const text = result.candidates[0].content.parts[0].text;
+                            monetizationText.innerHTML = text.replace(/\n/g, '<br>'); // Preserve newlines
+                            monetizationOutputDiv.classList.remove('hidden');
+                        } else {
+                            throw new Error('Unexpected API response structure.');
+                        }
+                    } catch (error) {
+                        console.error('Error calling Gemini API:', error);
+                        errorMessageMonetization.classList.remove('hidden');
+                        monetizationOutputDiv.classList.remove('hidden'); // Show the div even with error to display message
+                    } finally {
+                        loadingIndicatorMonetization.classList.add('hidden');
+                        monetizationButton.disabled = false;
+                        elaborateButton.disabled = false; // Re-enable other button
+                    }
+                });
+            }
+            
+            function renderTechStack() {
+                techStackAccordion.innerHTML = appData.techStack.map((tech, index) => `
+                    <div class="border border-slate-200 rounded-xl bg-white shadow-sm overflow-hidden">
+                        <button class="w-full text-left p-5 flex justify-between items-center hover:bg-slate-50 transition-colors" data-accordion-target="tech-${index}">
+                            <h3 class="text-xl font-semibold text-slate-800">${tech.name}</h3>
+                            <span class="text-2xl font-light text-slate-500 transform transition-transform duration-300">+</span>
+                        </button>
+                        <div id="tech-${index}" class="accordion-content p-5 pt-0 border-t border-slate-200" style="max-height: 0; overflow: hidden; transition: max-height 0.5s ease-out;">
+                            <p class="text-slate-600 mb-4">${tech.description}</p>
+                            <ul class="space-y-2 list-disc list-inside text-slate-700">
+                                ${tech.models.map(model => `<li>${model}</li>`).join('')}
+                            </ul>
+                        </div>
+                    </div>
+                `).join('');
+            }
+            
+            function renderProductionDetails() {
+                productionDetails.innerHTML = appData.production.map(p => `
+                    <div class="flex items-start space-x-4">
+                        <div class="text-3xl pt-1">${p.icon}</div>
+                        <div>
+                            <h4 class="text-xl font-semibold text-slate-900">${p.name}</h4>
+                            <p class="text-slate-600 mt-1">${p.description}</p>
+                        </div>
+                    </div>
+                `).join('');
+            }
+
+            function renderMonetization() {
+                monetizationGrid.innerHTML = appData.monetization.map(m => `
+                    <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
+                        <div class="flex items-center space-x-4 mb-4">
+                            <div class="text-4xl">${m.icon}</div>
+                            <h3 class="text-xl font-bold text-slate-900">${m.name}</h3>
+                        </div>
+                        <p class="text-slate-600">${m.description}</p>
+                    </div>
+                `).join('');
+            }
+
+            function renderProductionChart() {
+                const ctx = document.getElementById('productionChart').getContext('2d');
+                productionChart = new Chart(ctx, {
+                    type: 'radar',
+                    data: {
+                        labels: ['Scalability', 'Monitoring', 'Cost Control', 'Delivery'],
+                        datasets: [{
+                            label: 'Pillar Importance',
+                            data: [10, 9, 9, 10],
+                            backgroundColor: 'rgba(56, 189, 248, 0.2)',
+                            borderColor: 'rgba(2, 132, 199, 1)',
+                            pointBackgroundColor: 'rgba(2, 132, 199, 1)',
+                            pointBorderColor: '#fff',
+                            pointHoverBackgroundColor: '#fff',
+                            pointHoverBorderColor: 'rgba(2, 132, 199, 1)'
+                        }]
+                    },
+                    options: {
+                        maintainAspectRatio: false,
+                        responsive: true,
+                        scales: {
+                            r: {
+                                angleLines: {
+                                    color: 'rgba(0, 0, 0, 0.1)'
+                                },
+                                suggestedMin: 0,
+                                suggestedMax: 10,
+                                pointLabels: {
+                                    font: {
+                                        size: 14,
+                                        weight: '600'
+                                    },
+                                    color: '#334155'
+                                },
+                                grid: {
+                                   color: 'rgba(0, 0, 0, 0.1)' 
+                                },
+                                ticks: {
+                                    backdropColor: 'transparent',
+                                    color: '#64748b'
+                                }
+                            }
+                        },
+                        plugins: {
+                            legend: {
+                                display: false
+                            }
+                        }
+                    }
+                });
+            }
+            
+            // Event Listeners
+            navLinks.forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const viewId = e.target.dataset.view;
+                    switchView(viewId);
+                });
+            });
+
+            gigGrid.addEventListener('click', (e) => {
+                const card = e.target.closest('.gig-card');
+                if (card) {
+                    renderGigDetail(card.dataset.id);
+                }
+            });
+
+            techStackAccordion.addEventListener('click', (e) => {
+                const button = e.target.closest('button');
+                if (button) {
+                    const content = document.getElementById(button.dataset.accordionTarget);
+                    const icon = button.querySelector('span');
+                    const isOpen = content.style.maxHeight !== '0px';
+                    if(isOpen) {
+                        content.style.maxHeight = '0px';
+                        icon.style.transform = 'rotate(0deg)';
+                    } else {
+                        content.style.maxHeight = content.scrollHeight + 'px';
+                        icon.style.transform = 'rotate(45deg)';
+                    }
+                }
+            });
+
+            // Initial Load
+            const initialView = window.location.hash ? window.location.hash.substring(1) : 'overview';
+            renderGigGrid();
+            renderTechStack();
+            renderProductionDetails();
+            renderMonetization();
+            switchView(appData.gigs.some(g => g.id === initialView) ? 'overview' : initialView);
+            if(appData.gigs.some(g => g.id === initialView)) {
+                renderGigDetail(initialView);
+            }
+        });
+    </script>
+
+</body>
+</html>
