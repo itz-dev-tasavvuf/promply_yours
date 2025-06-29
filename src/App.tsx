@@ -1,26 +1,26 @@
 import React, { useState, createContext, useContext, useEffect, ReactNode } from 'react';
 import { HashRouter, Routes, Route, Navigate, useNavigate } from 'react-router-dom';
 
-import Navbar from './components/Navbar';
-import Footer from './components/Footer';
-import ThemeToggle from './components/ThemeToggle';
+import Navbar from '../promptly-yours/components/Navbar';
+import Footer from '../promptly-yours/components/Footer';
+import ThemeToggle from '../promptly-yours/components/ThemeToggle';
 import ErrorBoundary from './components/ErrorBoundary';
 import { ToastProvider } from './components/Toast';
-import LandingPage from './pages/LandingPage';
-import DashboardPage from './pages/DashboardPage';
-import PlaceholderPage from './pages/PlaceholderPage';
-import ChatbotBuilderPage from './pages/ChatbotBuilderPage';
-import MyArcadePage from './pages/MyArcadePage';
-import ContentWriterPage from './pages/ContentWriterPage'; 
-import ProofreadingPage from './pages/ProofreadingPage';
-import DataExtractionPage from './pages/DataExtractionPage';
-import ResumeBuilderPage from './pages/ResumeBuilderPage';
-import LoginPage from './pages/LoginPage';
+import LandingPage from '../promptly-yours/pages/LandingPage';
+import DashboardPage from '../promptly-yours/pages/DashboardPage';
+import PlaceholderPage from '../promptly-yours/pages/PlaceholderPage';
+import ChatbotBuilderPage from '../promptly-yours/pages/ChatbotBuilderPage';
+import MyArcadePage from '../promptly-yours/pages/MyArcadePage';
+import ContentWriterPage from '../promptly-yours/pages/ContentWriterPage'; 
+import ProofreadingPage from '../promptly-yours/pages/ProofreadingPage';
+import DataExtractionPage from '../promptly-yours/pages/DataExtractionPage';
+import ResumeBuilderPage from '../promptly-yours/pages/ResumeBuilderPage';
+import LoginPage from '../promptly-yours/pages/LoginPage';
 import Button from './components/Button';
-import { APP_NAME } from './constants';
+import { APP_NAME } from '../promptly-yours/constants';
 import { Icon } from './components/Icons';
-import { FirebaseUser } from './types';
-import { signOutUser, onAuthUserChanged } from './services/authService';
+import { FirebaseUser } from '../promptly-yours/types';
+import { signOutUser, onAuthUserChanged } from '../promptly-yours/services/authService';
 
 // --- Theme Management ---
 export enum Theme {
