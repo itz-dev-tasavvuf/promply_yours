@@ -47,11 +47,21 @@ export type IconType =
   | 'SupabaseIcon' | 'NetlifyIcon' | 'GitHubIcon';
 
 
-interface IconProps extends React.SVGProps<SVGSVGElement> {
+interface IconProps {
   icon: IconType;
+  size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl';
   className?: string;
+  style?: React.CSSProperties;
+  onClick?: () => void;
 }
 
+const sizeClasses = {
+  xs: 'w-3 h-3',
+  sm: 'w-4 h-4', 
+  md: 'w-5 h-5',
+  lg: 'w-6 h-6',
+  xl: 'w-8 h-8',
+};
 // This is a highly simplified representation.
 // A full implementation would have specific SVG paths for each icon.
 const iconMap: Record<IconType, React.ReactNode> = {
@@ -95,6 +105,9 @@ const iconMap: Record<IconType, React.ReactNode> = {
   SupabaseIcon: <path d="M2.41,1.38,11.8,7.05a.2.2,0,0,1,0,.36L2.41,13Z" />,
   NetlifyIcon: <path d="M8.7,1.1H6.1A.5.5,0,0,0,5.6,1.6V8.9a.1.1,0,0,1-.2.1L2,6.3a.5.5,0,0,0-.7,0L.1,7.4a.5.5,0,0,0,0,.7L5.8,14a.5.5,0,0,0,.7,0l5.7-5.9a.5.5,0,0,0,0-.7L11,6.3a.5.5,0,0,0-.7,0l-1.4,1.4a.1.1,0,0,1-.2-.1V1.6A.5.5,0,0,0,8.7,1.1Z" />,
   GitHubIcon: <path d="M12 2C6.477 2 2 6.477 2 12c0 4.418 2.865 8.165 6.839 9.49.5.092.682-.217.682-.482 0-.237-.009-.868-.014-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.031-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.378.203 2.398.1 2.651.64.7 1.03 1.595 1.03 2.688 0 3.848-2.338 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.577.688.482A10.001 10.001 0 0022 12c0-5.523-4.477-10-10-10z" />,
+  LoadingIcon: <path strokeLinecap="round" strokeLinejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m-15.357-2a8.001 8.001 0 0015.357 2m0 0H15" />,
+  InformationCircleIcon: <path strokeLinecap="round" strokeLinejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />,
+  LoginIcon: <path strokeLinecap="round" strokeLinejoin="round" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1" />,
   FolderIcon: <path strokeLinecap="round" strokeLinejoin="round" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z" />,
   FolderOpenIcon: <path strokeLinecap="round" strokeLinejoin="round" d="M5 19a2 2 0 01-2-2V7a2 2 0 012-2h4l2 2h4a2 2 0 012 2v1M5 19h14a2 2 0 002-2v-5a2 2 0 00-2-2H9a2 2 0 00-2 2v5a2 2 0 01-2 2z" />,
   CubeIcon: <path strokeLinecap="round" strokeLinejoin="round" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />,
@@ -163,14 +176,24 @@ allIconTypes.forEach(type => {
 });
 
 
-export const Icon: React.FC<IconProps> = ({ icon, className = 'w-6 h-6', ...props }) => {
+export const Icon: React.FC<IconProps> = ({ 
+  icon, 
+  size = 'md', 
+  className = '', 
+  style,
+  onClick 
+}) => {
+  const sizeClass = sizeClasses[size];
+  const finalClassName = `${sizeClass} ${className}`;
+  
   const commonProps = {
-    className,
+    className: finalClassName,
     fill: 'none',
     viewBox: '0 0 24 24',
     stroke: 'currentColor',
     strokeWidth: 1.5,
-    ...props,
+    style,
+    onClick,
   };
   
   const IconSvg = iconMap[icon] || PlaceholderIconSvg; // Fallback if icon name is somehow not in map

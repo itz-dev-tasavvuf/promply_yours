@@ -7,11 +7,13 @@ import { HashRouter, Routes, Route, Navigate, useNavigate } from 'react-router-d
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import ThemeToggle from './components/ThemeToggle';
+import ErrorBoundary from './components/ErrorBoundary';
+import { ToastProvider } from './components/Toast';
 import LandingPage from './pages/LandingPage';
 import DashboardPage from './pages/DashboardPage';
 import PlaceholderPage from './pages/PlaceholderPage';
 import ChatbotBuilderPage from './pages/ChatbotBuilderPage';
-import MyArcadePage from './pages/MyArcadePage'; // Import the new Arcade Page
+import MyArcadePage from './pages/MyArcadePage';
 import ContentWriterPage from './pages/ContentWriterPage'; 
 import ProofreadingPage from './pages/ProofreadingPage';
 import DataExtractionPage from './pages/DataExtractionPage';
@@ -109,22 +111,30 @@ export const useAuth = () => {
 // --- Landing Page Header ---
 const LandingHeader: React.FC = () => {
   const navigate = useNavigate();
-  const { isLoadingAuth } = useAuth(); // Keep for potential loading state on button if needed
+  const { isLoadingAuth } = useAuth();
 
   const goToLogin = () => {
     navigate('/login');
   };
 
   return (
-    <header className="sticky top-0 z-50 bg-white/70 dark:bg-neutral-800/70 backdrop-blur-lg shadow-md border-b border-white/20 dark:border-neutral-700/30">
+    <header className="sticky top-0 z-50 bg-white/80 dark:bg-neutral-800/80 backdrop-blur-lg shadow-soft border-b border-white/20 dark:border-neutral-700/30">
       <div className="container mx-auto px-4 h-16 flex justify-between items-center">
-        <div className="text-2xl font-bold text-orange-600 dark:text-orange-500">
-           <Icon icon="SparklesIcon" className="inline-block w-7 h-7 mr-2 align-middle" />
+        <div className="text-2xl font-bold text-orange-600 dark:text-orange-500 flex items-center">
+           <Icon icon="SparklesIcon" size="lg" className="mr-2 text-orange-500" />
            {APP_NAME}
         </div>
-        <div className="flex items-center space-x-2">
+        <div className="flex items-center space-x-3">
           <ThemeToggle />
-          <Button onClick={goToLogin} variant="primary" size="md" isLoading={isLoadingAuth} disabled={isLoadingAuth}>
+          <Button 
+            onClick={goToLogin} 
+            variant="primary" 
+            size="md" 
+            isLoading={isLoadingAuth} 
+            disabled={isLoadingAuth}
+            leftIcon="LoginIcon"
+            className="btn-hover-lift"
+          >
             {isLoadingAuth ? 'Loading...' : 'Login / Sign Up'}
           </Button>
         </div>
@@ -148,8 +158,15 @@ const MainLayout: React.FC = () => {
           ? 'bg-neutral-900 text-slate-100' 
           : 'bg-slate-100 text-neutral-800'
       }`}>
-        <Icon icon="SparklesIcon" className="w-16 h-16 text-orange-500 animate-pulse mb-4" />
-        <p className="text-xl">Loading {APP_NAME}...</p>
+        <div className="text-center space-y-4">
+          <Icon icon="SparklesIcon" size="xl" className="text-orange-500 animate-pulse mx-auto" />
+          <div className="space-y-2">
+            <h2 className="text-2xl font-bold">Loading {APP_NAME}...</h2>
+            <div className="w-48 h-2 bg-neutral-200 dark:bg-neutral-700 rounded-full overflow-hidden mx-auto">
+              <div className="h-full bg-gradient-to-r from-orange-500 to-orange-600 rounded-full animate-pulse"></div>
+            </div>
+          </div>
+        </div>
       </div>
     );
   }
@@ -202,13 +219,17 @@ const MainLayout: React.FC = () => {
 
 const App: React.FC = () => {
   return (
+    <ErrorBoundary>
     <ThemeProvider>
+        <ToastProvider>
       <AuthProvider>
         <HashRouter>
           <MainLayout />
         </HashRouter>
       </AuthProvider>
+        </ToastProvider>
     </ThemeProvider>
+    </ErrorBoundary>
   );
 };
 
