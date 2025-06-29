@@ -6,3 +6,5 @@
  import SectionTitle from '../components/SectionTitle';
  import { extractDataFromDocument } from '../services/geminiService';
  import { useDropzone } from 'react-dropzone-esm';
+
+export default SectionTitle

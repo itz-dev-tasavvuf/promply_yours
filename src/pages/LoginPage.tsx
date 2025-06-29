@@ -6,3 +6,5 @@
  import { Icon } from '../components/Icons';
  import { signInWithEmailPassword, signUpWithEmailPassword } from '../services/authService';
  import { useAuth } from '../App'; // To manage global loading state if needed
+
+export default Button

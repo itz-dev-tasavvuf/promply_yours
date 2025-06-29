@@ -5,3 +5,5 @@
  import Button from '../components/Button';
  import SectionTitle from '../components/SectionTitle';
  import { proofreadTextWithGemini } from '../services/geminiService';
+
+export default SectionTitle

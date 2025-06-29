@@ -9,3 +9,5 @@
  import { getAiRecommendations, getInspiredProjects, getBestAiModels } from '../services/geminiService'; // Simulated
  import { Recommendation, Project, AiModel, FirebaseUser } from '../types';
  import { Icon } from '../components/Icons';
+
+export default ModelCard

@@ -7,3 +7,5 @@
  import Button from '../components/Button';
  import { generateLogoPromptForGemini } from '../services/geminiService';
  import { saveArcadeConfig } from '../services/configService';
+
+export default Button

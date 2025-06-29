@@ -7,3 +7,5 @@
  import { Icon } from '../components/Icons';
  import Button from '../components/Button';
  import { generateReactProject } from '../services/projectGenerator';
+
+export default Button

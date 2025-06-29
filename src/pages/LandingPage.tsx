@@ -9,3 +9,5 @@
  import { HOW_IT_WORKS_STEPS, WHY_CHOOSE_US_POINTS, TESTIMONIALS_DATA, APP_NAME } from '../constants';
  import { Icon } from '../components/Icons';
  import { useAuth } from '../App';
+
+export default ProjectCard

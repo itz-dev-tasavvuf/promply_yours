@@ -7,3 +7,5 @@
  import { optimizeResumeAndGenerateCoverLetter } from '../services/geminiService';
  import ReactMarkdown from 'https://esm.sh/react-markdown@9';
  import remarkGfm from 'https://esm.sh/remark-gfm@4'
+
+export default remarkGfm
