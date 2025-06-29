@@ -4,7 +4,7 @@ import { HashRouter, Routes, Route, Navigate, useNavigate } from 'react-router-d
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import ThemeToggle from './components/ThemeToggle';
-import ErrorBoundary from './components/ErrorBoundary';
+import ErrorBoundary from '../components/ErrorBoundary';
 import { ToastProvider } from './components/Toast';
 import LandingPage from './pages/LandingPage';
 import DashboardPage from './pages/DashboardPage';
