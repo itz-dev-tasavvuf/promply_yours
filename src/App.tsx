@@ -1,11 +1,11 @@
 import React, { useState, createContext, useContext, useEffect, ReactNode } from 'react';
 import { HashRouter, Routes, Route, Navigate, useNavigate } from 'react-router-dom';
 
-import Navbar from './components/Navbar';
-import Footer from './components/Footer';
-import ThemeToggle from './components/ThemeToggle';
+import Navbar from '../components/Navbar';
+import Footer from '../components/Footer';
+import ThemeToggle from '../components/ThemeToggle';
 import ErrorBoundary from '../components/ErrorBoundary';
-import { ToastProvider } from './components/Toast';
+import { ToastProvider } from '../components/Toast';
 import LandingPage from './pages/LandingPage';
 import DashboardPage from './pages/DashboardPage';
 import PlaceholderPage from './pages/PlaceholderPage';
@@ -16,9 +16,9 @@ import ProofreadingPage from './pages/ProofreadingPage';
 import DataExtractionPage from './pages/DataExtractionPage';
 import ResumeBuilderPage from './pages/ResumeBuilderPage';
 import LoginPage from './pages/LoginPage';
-import Button from './components/Button';
+import Button from '../components/Button';
 import { APP_NAME } from './constants';
-import { Icon } from './components/Icons';
+import { Icon } from '../components/Icons';
 import { FirebaseUser } from './types';
 import { signOutUser, onAuthUserChanged } from './services/authService';
 
